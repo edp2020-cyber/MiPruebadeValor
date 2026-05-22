@@ -1,3 +1,15 @@
+import http.server
+import socketserver
+import threading
+
+# Esto crea un servidor web falso para que Render no mate el proceso
+def start_dummy_server():
+    handler = http.server.SimpleHTTPRequestHandler
+    with socketserver.TCPServer(("", 10000), handler) as httpd:
+        httpd.serve_forever()
+
+# Iniciamos el servidor en un hilo aparte
+threading.Thread(target=start_dummy_server, daemon=True).start()
 import os
 from alpaca.trading.client import TradingClient
 from alpaca.trading.requests import MarketOrderRequest
